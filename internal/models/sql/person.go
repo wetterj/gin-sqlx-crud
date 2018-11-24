@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS persons (
 	return &PersonService{conn: conn}, nil
 }
 
-// Create will try to add the user to the DB.
+// Create will try to add the person to the DB.
 func (s *PersonService) Create(form *forms.CreatePerson) (*models.Person, error) {
 	q := `
 INSERT INTO persons(first_name, last_name, address, age)
@@ -60,7 +60,7 @@ RETURNING *;`
 	return &output, nil
 }
 
-// Update will replace the values of the give user with those provided.
+// Update will replace the values of the give person with those provided.
 func (s *PersonService) Update(p *models.Person) error {
 	if !validID(p.ID) {
 		return models.ErrNotFound
@@ -97,7 +97,6 @@ func (s *PersonService) GetByID(id string) (*models.Person, error) {
 	}
 
 	q := `
-
 SELECT *
 FROM persons
 WHERE id = $1;`
@@ -108,7 +107,7 @@ WHERE id = $1;`
 		q,
 		id,
 	)
-	// Replace the SQL with our own error.
+	// Replace the SQL error with our own error type.
 	if err == sql.ErrNoRows {
 		return nil, models.ErrNotFound
 	} else if err != nil {

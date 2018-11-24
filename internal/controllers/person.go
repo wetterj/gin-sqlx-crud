@@ -14,8 +14,8 @@ type Person struct {
 	personService models.PersonService
 }
 
-// NewPerson created the controller using the given data mapper for
-// persons. Adds the routes to the group.
+// NewPerson creates the controller using the given data mapper for
+// persons.
 func NewPerson(personService models.PersonService) *Person {
 	return &Person{
 		personService: personService,
@@ -56,7 +56,7 @@ func (p *Person) Post(c *gin.Context) {
 	)
 }
 
-// Put will perform an update of a user.
+// Put will perform an update of a person.
 func (p *Person) Put(c *gin.Context) {
 	var form forms.CreatePerson
 	if err := c.ShouldBindWith(&form, binding.JSON); err != nil {

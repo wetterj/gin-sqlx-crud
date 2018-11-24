@@ -7,13 +7,13 @@ import (
 	"github.com/wetterj/gin-sqlx-crud/internal/models/sql"
 )
 
-// This is the thing I will inject dependencies into.
+// Server represents all the services and controllers.
 type Server struct {
 	PersonService models.PersonService
 	Gin           *gin.Engine
 }
 
-// This creates a new server using environment variables to
+// NewServer creates a new server using environment variables to
 // configure DB connection.
 func NewServer() (*Server, error) {
 	db, err := sql.NewSQL()

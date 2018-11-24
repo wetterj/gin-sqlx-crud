@@ -30,6 +30,7 @@ func NewSQL() (*sqlx.DB, error) {
 	return sqlx.Connect("postgres", info)
 }
 
+// validID checks if the given string is a valid id.
 func validID(id string) bool {
 	_, err := strconv.Atoi(id)
 	return err == nil

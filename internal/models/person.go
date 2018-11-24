@@ -19,6 +19,7 @@ type Person struct {
 	Age       null.Int
 }
 
+// This updates the person data to match what is in the form.
 func (p *Person) ApplyForm(form *forms.CreatePerson) {
 	p.FirstName = *form.FirstName
 	p.LastName = null.StringFromPtr(form.LastName)
