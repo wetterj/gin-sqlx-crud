@@ -1,0 +1,51 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    name: gin-sqlx-crud
+spec:
+    replicas: 1
+    strategy:
+        type: RollingUpdate
+    template:
+        metadata:
+            labels: 
+                name: gin-sqlx-crud
+        spec:
+            containers:
+                - name: gin-sqlx-crud
+                  image: registry.some-url.io/wetterj/gin-sqlx-crud:${BUILD_NUMBER}
+                  ports:
+                      - containerPort: 8080
+                  env:
+                      - name: POSTGRES_HOST
+                        value: "ip-10-240-37-138.ap-northeast-2.compute.internal:27017"
+                      - name: POSTGRES_DB
+                        value: "gin_sqlx_crud"
+                      - name: POSTGRES_USER
+                        valueFrom:
+                          secretKeyRef:
+                                  name: postgres
+                                  key: user
+                      - name: POSTGRES_PASSWORD
+                        valueFrom:
+                          secretKeyRef:
+                                  name: postgres
+                                  key: password
+            imagePullSecrets:
+                - name: registry-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: gin-sqlx-crud
+    labels:
+        name: gin-sqlx-crud
+spec:
+  ports:
+  - port:       80
+    targetPort: 8080
+  selector:
+    name: gin-sqlx-crud
+  type: ClusterIP
