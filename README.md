@@ -55,4 +55,5 @@ user and password.
 
 The service is exposed as ClusterIP. In my previous setups I used an nginx ingress network to
 forward requests to the correct ClusterIP service, that way one AWS load balancer could
-be used for multiple domains and services.
+be used for multiple domains and services. Also nginx will be responsible for ssl
+and compression etc.
