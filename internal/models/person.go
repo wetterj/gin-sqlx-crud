@@ -13,7 +13,7 @@ type Person struct {
 	ID        string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	FirstName null.String
+	FirstName string
 	LastName  null.String
 	Address   null.String
 	Age       null.Int
