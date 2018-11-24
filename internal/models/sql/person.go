@@ -62,6 +62,10 @@ RETURNING *;`
 
 // Update will replace the values of the give user with those provided.
 func (s *PersonService) Update(p *models.Person) error {
+	if !validID(p.ID) {
+		return models.ErrNotFound
+	}
+
 	q := `
 UPDATE persons
 SET updated_at = NOW(),
@@ -88,7 +92,12 @@ WHERE id = $5;
 
 // GetByID fetches the person with the given id.
 func (s *PersonService) GetByID(id string) (*models.Person, error) {
+	if !validID(id) {
+		return nil, models.ErrNotFound
+	}
+
 	q := `
+
 SELECT *
 FROM persons
 WHERE id = $1;`
@@ -113,6 +122,10 @@ WHERE id = $1;`
 // TODO: this should just mark the object as deleted,
 // not actually get rid of the data.
 func (s *PersonService) Delete(id string) error {
+	if !validID(id) {
+		return models.ErrNotFound
+	}
+
 	q := `
 DELETE FROM persons
 WHERE id = $1;

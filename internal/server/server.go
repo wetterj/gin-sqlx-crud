@@ -16,12 +16,12 @@ type Server struct {
 // This creates a new server using environment variables to
 // configure DB connection.
 func NewServer() (*Server, error) {
-	sql, err := sql.NewSQL()
+	db, err := sql.NewSQL()
 	if err != nil {
 		return nil, err
 	}
 
-	personService, err := sql.NewPersonService(sql)
+	personService, err := sql.NewPersonService(db)
 	if err != nil {
 		return nil, err
 	}
@@ -30,6 +30,7 @@ func NewServer() (*Server, error) {
 	{
 		route := r.Group("/person")
 		ctrl := controllers.NewPerson(personService)
+
 		route.POST("", ctrl.Post)
 		route.PUT("/:id", ctrl.Put)
 		route.GET("/:id", ctrl.Get)

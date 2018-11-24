@@ -11,12 +11,19 @@ import (
 // details from the rest of the code.
 type Person struct {
 	ID        string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	FirstName string
-	LastName  null.String
+	CreatedAt time.Time   `db:"created_at"`
+	UpdatedAt time.Time   `db:"updated_at"`
+	FirstName string      `db:"first_name"`
+	LastName  null.String `db:"last_name"`
 	Address   null.String
 	Age       null.Int
+}
+
+func (p *Person) ApplyForm(form *forms.CreatePerson) {
+	p.FirstName = *form.FirstName
+	p.LastName = null.StringFromPtr(form.LastName)
+	p.Address = null.StringFromPtr(form.Address)
+	p.Age = null.IntFromPtr(form.Age)
 }
 
 // PersonService is the data mapping layer interface, again hiding implementation details.

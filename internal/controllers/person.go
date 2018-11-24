@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/guregu/null"
 	"github.com/wetterj/gin-sqlx-crud/internal/forms"
 	"github.com/wetterj/gin-sqlx-crud/internal/models"
 )
@@ -16,11 +15,11 @@ type Person struct {
 }
 
 // NewPerson created the controller using the given data mapper for
-// persons.
-func NewPerson(personService models.PersonService) (*Person, error) {
+// persons. Adds the routes to the group.
+func NewPerson(personService models.PersonService) *Person {
 	return &Person{
 		personService: personService,
-	}, nil
+	}
 }
 
 // Post will create a new person from the given data, if the form is valid.
@@ -60,11 +59,15 @@ func (p *Person) Post(c *gin.Context) {
 // Put will perform an update of a user.
 func (p *Person) Put(c *gin.Context) {
 	var form forms.CreatePerson
-	if c.ShouldBindWith(&form, binding.JSON) != nil {
+	if err := c.ShouldBindWith(&form, binding.JSON); err != nil {
 		// TODO: Give a better error message.
 		c.JSON(
 			http.StatusNotAcceptable,
-			gin.H{"message": "invalid data."},
+			gin.H{
+				"message": "invalid data.",
+				"form":    form,
+				"error":   err.Error(),
+			},
 		)
 		c.Abort()
 		return
@@ -89,10 +92,7 @@ func (p *Person) Put(c *gin.Context) {
 		return
 	}
 
-	person.FirstName = *form.FirstName
-	person.LastName = null.StringFromPtr(form.LastName)
-	person.Address = null.StringFromPtr(form.Address)
-	person.Age = null.IntFromPtr(form.Age)
+	person.ApplyForm(&form)
 	err = p.personService.Update(person)
 	if err != nil {
 		c.Error(err)

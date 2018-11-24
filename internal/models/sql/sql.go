@@ -1,9 +1,9 @@
 package sql
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
@@ -12,7 +12,7 @@ import (
 
 // NewSQL creates and SQL connection using environment variables
 // to configure.
-func NewSQL() (*sql.DB, error) {
+func NewSQL() (*sqlx.DB, error) {
 	host := strings.TrimSpace(os.Getenv("POSTGRES_HOST"))
 	port := strings.TrimSpace(os.Getenv("POSTGRES_PORT"))
 	user := strings.TrimSpace(os.Getenv("POSTGRES_USER"))
@@ -27,5 +27,10 @@ func NewSQL() (*sql.DB, error) {
 		password,
 		db,
 	)
-	return sqlx.Connect("postgre", info)
+	return sqlx.Connect("postgres", info)
+}
+
+func validID(id string) bool {
+	_, err := strconv.Atoi(id)
+	return err == nil
 }
