@@ -37,6 +37,10 @@
   name = "github.com/gin-gonic/gin"
   version = "1.3.0"
 
+[[constraint]]
+  name = "github.com/lib/pq"
+  version = "1.0.0"
+
 [prune]
   go-tests = true
   unused-packages = true

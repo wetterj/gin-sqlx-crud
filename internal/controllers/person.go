@@ -57,9 +57,9 @@ func (p *Person) Post(c *gin.Context) {
 	)
 }
 
-// Patch will perform a partial update of a user.
-func (p *Person) Patch(c *gin.Context) {
-	var form forms.UpdatePerson
+// Put will perform an update of a user.
+func (p *Person) Put(c *gin.Context) {
+	var form forms.CreatePerson
 	if c.ShouldBindWith(&form, binding.JSON) != nil {
 		// TODO: Give a better error message.
 		c.JSON(
@@ -89,19 +89,10 @@ func (p *Person) Patch(c *gin.Context) {
 		return
 	}
 
-	if form.FirstName != nil {
-		person.FirstName = *form.FirstName
-	}
-	if form.LastName != nil {
-		person.LastName = null.StringFrom(*form.LastName)
-	}
-	if form.Address != nil {
-		person.Address = null.StringFrom(*form.Address)
-	}
-	if form.Age != nil {
-		person.Age = null.IntFrom(*form.Age)
-	}
-
+	person.FirstName = *form.FirstName
+	person.LastName = null.StringFromPtr(form.LastName)
+	person.Address = null.StringFromPtr(form.Address)
+	person.Age = null.IntFromPtr(form.Age)
 	err = p.personService.Update(person)
 	if err != nil {
 		c.Error(err)
