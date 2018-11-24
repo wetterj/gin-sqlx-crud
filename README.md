@@ -48,3 +48,11 @@ To build a docker image of the server suitable for deployment into kubernetes us
 ```bash
 docker build -t wetterj/gin-sqlx-crud -f dockerfiles/production.dockerfile .
 ```
+
+There is a sample kubernetes manifest in `k8s/production.yaml`. It assumes
+there is a docker registry available, a postgres DB available and a secret that describes the DB
+user and password.
+
+The service is exposed as ClusterIP. In my previous setups I used an nginx ingress network to
+forward requests to the correct ClusterIP service, that way one AWS load balancer could
+be used for multiple domains and services.
