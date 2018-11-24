@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Launch a postgres DB for integration testing
+# Launch a postgres DB for dev environment
 docker run -d \
         --name gin-sqlx-crud-dev \
         -p 22222:5432 \
@@ -14,7 +14,7 @@ sleep 2s
 # compile
 go install github.com/wetterj/gin-sqlx-crud/cmd/srv
 
-# Run the go tests
+# Run the server
 POSTGRES_HOST=localhost \
 POSTGRES_PORT=22222 \
 POSTGRES_USER=postgres \
